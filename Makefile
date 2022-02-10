@@ -18,7 +18,7 @@ clean:
 	-rm -f $(OBJS)
 
 fclean: clean
-	-rm -f $(SERVER)
+	-rm -f $(BONUSBOT)
 
 re: fclean all
 
