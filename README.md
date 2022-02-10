@@ -5,3 +5,5 @@ Usage:
 ```bash
 ./bonusbot f1r3s16.codam.nl 44500 password123
 ```
+
+Guide: [https://github.com/donadoio/TCP_Servers](https://github.com/donadoio/TCP_Servers)
