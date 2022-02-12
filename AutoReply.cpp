@@ -37,14 +37,65 @@ void    AutoReply::trimMsg(void)
     return ;
 }
 
+std::string AutoReply::getTime(void)
+{
+    time_t t;
+
+    time(&t);
+    std::string result = std::string(ctime(&t), 11, 5);
+    return (result);
+}
+
+std::string AutoReply::getDate(void)
+{
+    time_t t;
+
+    time(&t);
+    std::string result = std::string(ctime(&t), 4, 7) + std::string(ctime(&t), 20, 4);
+    return (result);
+}
+
+std::string AutoReply::getDay(void)
+{
+    time_t t;
+
+    time(&t);
+    std::string result = std::string(ctime(&t), 0, 3);
+    if (result == "Fri")
+        result = "Friday";
+    else if (result == "Sat")
+        result = "Saturday";
+    else if (result == "Sun")
+        result = "Sunday";
+    else if (result == "Mon")
+        result = "Monday";
+    else if (result == "Tue")
+        result = "Tuesday";
+    else if (result == "Wed")
+        result = "Wednesday";
+    else
+        result = "Thursday";
+    return (result);
+}
+
 void    AutoReply::setReply(const std::string& sender, const std::string& msg)
 {
     this->_sender = sender;
     this->_msg = msg;
     this->trimMsg();
 
-    if (this->_msg == "time" || this->_msg == "time.")
-        this->_reply = "PRIVMSG " + this->_sender + " :" + "The time is 12:00\r\n";
+    if (strcasecmp(this->_msg.c_str(), "time") == 0 || strcasecmp(this->_msg.c_str(), "time.") == 0)
+    {
+        this->_reply = "PRIVMSG " + this->_sender + " :" + "The time is " + this->getTime() + "\r\n";
+    }
+    else if (strcasecmp(this->_msg.c_str(), "date") == 0 || strcasecmp(this->_msg.c_str(), "date.") == 0)
+    {
+        this->_reply = "PRIVMSG " + this->_sender + " :" + this->getDate() + "\r\n";
+    }
+    else if (strcasecmp(this->_msg.c_str(), "day") == 0 || strcasecmp(this->_msg.c_str(), "day.") == 0)
+    {
+        this->_reply = "PRIVMSG " + this->_sender + " :" + this->getDay() + "\r\n";
+    }
     else
         this->_reply = "PRIVMSG " + this->_sender + " :" + "Come again?\r\n";
     return ;
