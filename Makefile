@@ -1,6 +1,6 @@
 BONUSBOT = bonusbot
 
-SRCS = bonusbot.cpp ArgParser.cpp AutoReply.cpp
+SRCS = bonusbot.cpp ArgParser.cpp AutoReply.cpp Connect.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
