@@ -78,6 +78,24 @@ std::string AutoReply::getDay(void)
     return (result);
 }
 
+bool    AutoReply::isJoinRequest(void)
+{
+    if (this->_msg.length() < 9)
+        return false;
+    std::string first_part(this->_msg.c_str(), 0, 8);
+    if (strcasecmp(first_part.c_str(), "come to ") == 0)
+        return true;
+    return false;
+}
+
+void    AutoReply::joinRequest(void)
+{
+    std::string rest(this->_msg.c_str(), 8, std::string::npos);
+    std::string result = "JOIN #" + rest + "\r`\n";
+    this->_reply += result;
+    std::cout << this->_reply;
+}
+
 void    AutoReply::setReply(const std::string& sender, const std::string& msg)
 {
     this->_sender = sender;
@@ -95,6 +113,11 @@ void    AutoReply::setReply(const std::string& sender, const std::string& msg)
     else if (strcasecmp(this->_msg.c_str(), "day") == 0 || strcasecmp(this->_msg.c_str(), "day.") == 0)
     {
         this->_reply = "PRIVMSG " + this->_sender + " :" + this->getDay() + "\r\n";
+    }
+    else if (this->isJoinRequest() == true)
+    {
+        this->_reply = "PRIVMSG " + this->_sender + " :" + "I'm coming to the rescue." + "\r\n";
+        this->joinRequest();
     }
     else
         this->_reply = "PRIVMSG " + this->_sender + " :" + "Come again?\r\n";

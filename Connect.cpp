@@ -16,7 +16,7 @@ void    Connect::setSocket(void)
     this->socket_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->socket_fd == -1)
     {
-        std::cout << "Bonus bot failed creating socket.\n";
+        std::cerr << "Bonus bot failed creating socket.\n";
         exit (1);
     }
     return ;
@@ -37,12 +37,12 @@ int     Connect::reconnect(void)
     this->socket_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->socket_fd == -1)
     {
-        std::cout << "Bonus bot failed creating socket when reconnecting.\n";
+        std::cerr << "Bonus bot failed creating socket when reconnecting.\n";
         exit (1);
     }
     if (::connect(this->socket_fd, (sockaddr*)&this->hint, (socklen_t)(sizeof(this->hint))) == -1)
     {
-        std::cout << "Reconnection failed.\n";
+        std::cerr << "Reconnection failed.\n";
         return (-1);
     }
     this->authenticate();
@@ -53,7 +53,7 @@ int    Connect::connect(void)
 {
     if (::connect(this->socket_fd, (sockaddr*)&this->hint, (socklen_t)(sizeof(this->hint))) == -1)
     {
-        std::cout << "Connection failed.\n";
+        std::cerr << "Connection failed.\n";
         return(-1);
     }
     return (0);
@@ -66,7 +66,7 @@ void    Connect::authenticate(void)
     input = "CAPLS \r\nPASS " + args->getPassword() + "\r\nNICK bonusbot\r\nUSER bonusbot bonusbot " + args->getAddress() + " :Bonus Bot\r\n";
     if (send(socket_fd, input.c_str(), input.size() + 1, 0) == -1)
     {
-        std::cout << "Authentification failed.\n";
+        std::cerr << "Authentification failed.\n";
         close(this->socket_fd);
         exit(1);
     }
