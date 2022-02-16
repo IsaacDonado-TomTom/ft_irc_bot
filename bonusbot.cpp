@@ -59,7 +59,7 @@ int main(int argc, char** argv)
         else
         {// Received from server... Define behaviour
             str_received = std::string(buff, recv_result);
-            std::cout << "SERVER> " << str_received << "\r\n";
+            //std::cout << "SERVER> " << str_received << "\r\n";
 
             pm_pos = str_received.find("PRIVMSG");
             if (str_received.find("PRIVMSG") != std::string::npos)
@@ -92,8 +92,8 @@ int main(int argc, char** argv)
                     }
                 }
 
-                std::cout << sender_nick << "'" <<std::endl;
-                std::cout << "Msg: '" << sender_msg << "'" << std::endl;
+                //std::cout << sender_nick << "'" <<std::endl;
+                //std::cout << "Msg: '" << sender_msg << "'" << std::endl;
 
                 auto_reply.setReply(sender_nick, sender_msg);
                 auto_reply.sendReply(connection.getSocket());

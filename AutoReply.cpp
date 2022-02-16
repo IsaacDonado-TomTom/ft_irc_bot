@@ -1,4 +1,5 @@
 #include "AutoReply.hpp"
+# include <unistd.h>
 
 AutoReply::AutoReply()
 {
@@ -91,7 +92,7 @@ bool    AutoReply::isJoinRequest(void)
 void    AutoReply::joinRequest(void)
 {
     std::string rest(this->_msg.c_str(), 8, std::string::npos);
-    std::string result = "JOIN #" + rest + "\r`\n";
+    std::string result = "JOIN #" + rest + "\r\nPRIVMSG #" + rest + " :<3\r\nPART #" + rest + "\r\n";
     this->_reply += result;
     std::cout << this->_reply;
 }
@@ -126,8 +127,25 @@ void    AutoReply::setReply(const std::string& sender, const std::string& msg)
 
 void    AutoReply::sendReply(int socket_fd)
 {
-    int send_result = send(socket_fd, this->_reply.c_str(), this->_reply.size() + 1, 0);
-    if (send_result == -1)
-        std::cerr << "Unable to send data to server.\n";
+    int send_result;
+    std::string temp;
+    if (this->isJoinRequest() == false)
+    {
+        send_result = send(socket_fd, this->_reply.c_str(), this->_reply.size() + 1, 0);
+        if (send_result == -1)
+            std::cerr << "Unable to send data to server.\n";
+    }
+    else
+    {
+        while (this->_reply != "")
+        {
+            usleep(500);
+            temp = std::string(this->_reply.c_str(), 0, this->_reply.find("\r\n") + 2);
+            send_result = send(socket_fd, temp.c_str(), temp.size() + 1, 0);
+            if (send_result == -1)
+                std::cerr << "Unable to send data to server.\n";
+            this->_reply = std::string(this->_reply.c_str(), this->_reply.find("\r\n") + 2, std::string::npos);
+        }
+    }
     return ;
 }

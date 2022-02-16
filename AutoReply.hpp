@@ -17,6 +17,7 @@ class   AutoReply
         void        trimMsg(void);
         bool        isJoinRequest(void);
         void        joinRequest(void);
+        bool        sendPartial(int socket_fd);
         std::string getTime(void);
         std::string getDate(void);
         std::string getDay(void);
