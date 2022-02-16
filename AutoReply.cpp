@@ -89,6 +89,13 @@ bool    AutoReply::isJoinRequest(void)
     return false;
 }
 
+bool    AutoReply::isMadCat(void)
+{
+    if (strcasecmp(this->_msg.c_str(), "We're all mad here") == 0 || strcasecmp(this->_msg.c_str(), "We're all mad here.") == 0)
+        return true;
+    return false;
+}
+
 void    AutoReply::joinRequest(void)
 {
     std::string rest(this->_msg.c_str(), 8, std::string::npos);
@@ -115,6 +122,21 @@ void    AutoReply::setReply(const std::string& sender, const std::string& msg)
     {
         this->_reply = "PRIVMSG " + this->_sender + " :" + this->getDay() + "\r\n";
     }
+    else if (strcasecmp(this->_msg.c_str(), "We're all mad here") == 0 || strcasecmp(this->_msg.c_str(), "We're all mad here.") == 0)
+    {
+        this->_reply = "PRIVMSG " + this->_sender + " :          .'\\   /`.\r\n" + \
+        "PRIVMSG " + this->_sender + " :         .'.-.`-'.-.`.\r\n" + \
+        "PRIVMSG " + this->_sender + " :    ..._:   .-. .-.   :_...\r\n" + \
+        "PRIVMSG " + this->_sender + " :  .'    '-.(o ) (o ).-'    `.\r\n" + \
+        "PRIVMSG " + this->_sender + " : :  _    _ _`~(_)~`_ _    _  :\r\n" + \
+        "PRIVMSG " + this->_sender + " ::  /:   ' .-=_   _=-. `   ;\\  :\r\n" + \
+        "PRIVMSG " + this->_sender + " ::   :|-.._  '     `  _..-|:   :\r\n" + \
+        "PRIVMSG " + this->_sender + " : :   `:| |`:-:-.-:-:'| |:'   :\r\n" + \
+        "PRIVMSG " + this->_sender + " :  `.   `.| | | | | | |.'   .'\r\n" + \
+        "PRIVMSG " + this->_sender + " :    `.   `-:_| | |_:-'   .'\r\n" + \
+        "PRIVMSG " + this->_sender + " :      `-._   ````    _.-'\r\n" + \
+        "PRIVMSG " + this->_sender + " :          ``-------''\r\n";
+    }
     else if (this->isJoinRequest() == true)
     {
         this->_reply = "PRIVMSG " + this->_sender + " :" + "I'm coming to the rescue." + "\r\n";
@@ -129,7 +151,7 @@ void    AutoReply::sendReply(int socket_fd)
 {
     int send_result;
     std::string temp;
-    if (this->isJoinRequest() == false)
+    if (this->isJoinRequest() == false && this->isMadCat() == false)
     {
         send_result = send(socket_fd, this->_reply.c_str(), this->_reply.size() + 1, 0);
         if (send_result == -1)
